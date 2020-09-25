@@ -8,7 +8,7 @@
 #   The environment variables key names are:
 #     - AWS_ACCESS_KEY_ID - sensitive
 #     - AWS_SECRET_ACCESS_KEY - sensitive
-# - Invite your fellow 
+# - Invite your fellow hackers to your organization!
 
 
 # terraform {

@@ -48,12 +48,43 @@ Terraform is an **infrastructure as code** tool that lets developers easily buil
 ## Click-Ops vs Terraform
 
 ----
+
 ### Click-Ops
 ![ ](./images/s3bucket.gif)
 
 ----
+
 ### Terraform
 ![ ](./images/terraform.gif)
 
 ---
+
+## Important Terraform CLI Commands
+```bash
+terraform <command> [args]
+```
+
+| CMD | Description |
+| ----- | -------|
+| `plan` | Creates execution plan showing what terraform will do |
+| `apply` | Run a plan and after confirmation deploys resources |
+| `destroy` | Runs a plan and after confirmation deletes deployed resources |
+| `--help` | Get a list of all the commands available and descriptions |
+
+----
+
+### Less Important Terraform CLI Commands
+```bash
+terraform <command> [args]
+```
+
+| CMD | Description |
+| ----- | -------|
+| `validate` | Checks that your terraform files aren't goofed |
+| `fmt` | Makes your terraform files really pretty |
+| `workspace` | Manages your terraform workspaces |
+
+---
+
+## Terraform Language Basics
 

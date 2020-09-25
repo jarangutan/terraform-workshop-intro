@@ -1,0 +1,16 @@
+- What is terraform
+    - To understand infrastructure as code you need to understand the infrastructure you're codefying
+- What is AWS
+    - Tons of services ready to go out of the box. Almost like a big set of legos you can put together
+- Workshop - Simple
+    - Terraform CLI
+    - main.tf provider
+    - S3 bucket
+    - env.tfvars
+    - variables
+    - Terraform plan
+    - Terraform Deploy
+    - The heck is a State File?
+    - OPTIONAL - Remote backend using terraform cloud
+    - Why a remote backend? Work with fellow devs in a team
+- Demo of proper app

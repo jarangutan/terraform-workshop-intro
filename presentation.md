@@ -6,6 +6,7 @@ highlightTheme: "solarized-dark"
 ---
 
 # terraform-workshop-intro
+
 Intro to terraform workshop covering the creation of a "terraform_backend" and a "lambda_api" using Amazon Web Services (AWS)
 
 https://github.com/jarangutan/terraform-workshop-intro
@@ -13,12 +14,15 @@ https://github.com/jarangutan/terraform-workshop-intro
 ---
 
 ## What is in this repo?
+
 ### "buckets/"
+
 This tutorial covers the basics of terraform by walking you through creating a static website out on S3
 
 ---
 
 ## Pre-requisites
+
 - A terminal (depends on your OS!)
     - **Windows Users** I highly recommend getting a bash like terminal like [git bash](https://git-scm.com/downloads)
 - [npm and NodeJS](https://www.npmjs.com/get-npm)
@@ -31,6 +35,7 @@ This tutorial covers the basics of terraform by walking you through creating a s
 ---
 
 ## Caveats
+
 - AWS is a cloud platform which means you pay for using their platform
 - This workshop is tailored to stay closely within the AWS free tier
 - There is a chance you might get charged for the resources used in this workshop
@@ -39,11 +44,13 @@ This tutorial covers the basics of terraform by walking you through creating a s
 ---
 
 ## Terraform: The Basics
+
 Terraform is an **infrastructure as code** tool that lets developers easily build, change and version infrastructure. 
 
 ---
 
 ## Terraform: Benefits
+
 - Devs can define resource definition files that can be versioned, shared and re-used
 - Provides execution plans of what terraform will modify/create/destroy
 - Handles provisioning of dependent and non-dependent resources in parallel
@@ -57,21 +64,24 @@ Terraform is an **infrastructure as code** tool that lets developers easily buil
 ----
 
 ### Click-Ops
+
 ![ ](./images/s3bucket.gif)
 
 ----
 
 ### Terraform
+
 ![ ](./images/terraform.gif)
 
 ---
 
 ### Install Terraform CLI
+
 - Download the binary from https://www.terraform.io/downloads.html
 - **Windows users** Highly recommend you install git-bash or some other bash like terminal to use with Terraform
-- 
 
 ### Important Terraform CLI Commands
+
 ```bash
 terraform <command> [args]
 ```
@@ -86,6 +96,7 @@ terraform <command> [args]
 ----
 
 ### Equally Important Terraform CLI Commands
+
 ```bash
 terraform <command> [args]
 ```
@@ -103,6 +114,7 @@ terraform <command> [args]
 ----
 
 ### Create AWS Programmatic User
+
 **Create a user with admin permissions and save your AWS Access key ID and Secret key!**
 
 ![ ](./images/programmaticuser.gif)
@@ -110,6 +122,7 @@ terraform <command> [args]
 ----
 
 ### Configure your CLI with the AWS
+
 [Create the AWS credentials and config files. Click here for sample!](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 `~/.aws/credentials` **note ~ is your home folder**
@@ -154,6 +167,7 @@ BLOCKTYPE "BLOCKLABEL" "BLOCKNAME" {
 ----
 
 ### Providers
+
 - Translates APIs used to build resources into something terraform can use
 - Also offers local utilities for stuff like generating random numbers or making zip files
 
@@ -167,8 +181,10 @@ provider "aws" {
 ----
 
 ### Variables
+
 - Created using a variable block
 - Variables can be loaded from .tfvars files which hold key value pairs
+     - Usage example: Changing variables between different environments
 
 ```
 variable "region" {
@@ -186,5 +202,179 @@ variable "region" {
 region = "us-west-2"
 ```
 
-### Terraform Language Basics cont.
-- 
+----
+
+### Locals
+
+- Local values store variables as well as expressions
+- Helps you avoid repeating yourself :D
+
+```
+locals {
+  potato = "tomato"
+  tags = {
+    project = "terraform-workshop-intro"
+    env     = var.env
+    region  = var.region
+  }
+  veglist = concat(aws_s3_bucket.yam.id, aws_s3_bucket.turnip.id)
+}
+```
+
+```
+resource "aws_s3_bucket" "example" {
+  # ...
+  tags = local.tags
+}
+```
+
+----
+
+### Learn more language stuff on the docs
+
+Go to https://www.terraform.io/docs/configuration/index.html
+
+---
+
+## Lets make buckets!
+
+Hosting a static site in AWS using an s3 bucket configured for public access as a website using only terraform
+
+__Checkout the fully built app in `buckets/`__
+
+----
+
+### dev.tfvars
+
+- Create a `dev.tfvars` file with the following:
+
+```
+region = "us-east-1"
+env    = "dev"
+```
+
+----
+
+### variables.tf
+
+- Create two variable blocks for `region` and `env`
+
+```
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "Region to use in AWS"
+}
+
+variable "env" {
+  type        = string
+  default     = "dev"
+  description = "Environment prefix for resources"
+}
+```
+
+----
+
+### main.tf - Part 1
+
+- Create the aws provider block
+
+```
+provider "aws" {
+  region = var.region
+}
+```
+
+- Make a locals block with a tags object
+
+```
+locals {
+  tags = {
+    project = "terraform-workshop-intro"
+    repo    = "https://github.com/jarangutan/terraform-workshop-intro"
+    region  = var.region
+    env     = var.env
+  }
+}
+```
+
+----
+
+### main.tf - Part 2
+
+- Use the resource `random_pet` to create a random name for the bucket
+
+```
+resource "random_pet" "name" {
+  length    = 3
+  separator = "-"
+}
+```
+
+----
+
+### main.tf - Part 3
+
+- Create an s3 bucket configured for website use
+
+```
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${var.env}-${random_pet.name.id}"
+  acl    = "public-read"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.env}-${random_pet.name.id}/*"
+      ]
+    }
+  ]
+}
+EOF
+
+  website {
+    index_document = "index.html"
+  }
+
+  force_destroy = true
+}
+```
+
+----
+
+### main.tf - Part 4
+
+- Add the `index.html` file to the bucket
+
+```terraform
+resource "aws_s3_bucket_object" "website" {
+  acl          = "public-read"
+  key          = "index.html"
+  bucket       = aws_s3_bucket.bucket.id
+  content      = file("${path.module}/assets/index.html")
+  content_type = "text/html"
+}
+```
+
+----
+
+### Run terraform
+Deploy out to AWS! **Note** that we referenced the `dev.tfvars` file!
+
+```
+terraform apply -var-file=dev.tfvars
+```
+
+![ ](.images/terraformapply.gif)
+
+
+### 

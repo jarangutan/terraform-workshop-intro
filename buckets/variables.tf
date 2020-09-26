@@ -6,6 +6,6 @@ variable "region" {
 
 variable "env" {
   type        = string
-  default     = ""
+  default     = "dev"
   description = "Environment prefix for resources"
 }

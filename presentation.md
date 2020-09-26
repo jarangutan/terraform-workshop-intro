@@ -96,24 +96,6 @@ terraform <command> [args]
 | `validate` | Checks that your terraform files aren't goofed |
 | `fmt` | Makes your terraform files really pretty |
 
-
----
-
-## Terraform Language Basics
-
-```
-resource "aws_vpc" "main" {
-  cidr_block = var.base_cidr_block
-}
-
-<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
-  # Block body
-  <IDENTIFIER> = <EXPRESSION> # Argument
-}
-```
-
-[from Terraform Docs](https://www.terraform.io/docs/configuration/index.html)
-
 ---
 
 ## Configure Terraform to use AWS
@@ -146,3 +128,63 @@ region=us-west-2
 output=json
 ```
 
+---
+
+## Terraform Language Basics
+
+----
+
+### Resource Blocks
+
+```
+resource "aws_vpc" "main" {
+  cidr_block = var.base_cidr_block
+}
+```
+
+```
+BLOCKTYPE "BLOCKLABEL" "BLOCKNAME" {
+  # Block body
+  IDENTIFIER = EXPRESSION # Argument
+}
+```
+
+[from Terraform Docs](https://www.terraform.io/docs/configuration/index.html)
+
+----
+
+### Providers
+- Translates APIs used to build resources into something terraform can use
+- Also offers local utilities for stuff like generating random numbers or making zip files
+
+```
+// Tells terraform we're using Amazon Web Services
+provider "aws" {
+  region = var.region
+}
+```
+
+----
+
+### Variables
+- Created using a variable block
+- Variables can be loaded from .tfvars files which hold key value pairs
+
+```
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "Region to use in AWS"
+}
+```
+
+`dev.tfvars`
+
+```
+// This will change region to us-west-2
+// from the default region set in the variable block
+region = "us-west-2"
+```
+
+### Terraform Language Basics cont.
+- 

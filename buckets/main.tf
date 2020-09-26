@@ -1,4 +1,4 @@
-provider aws {
+provider "aws" {
   region = var.region
 }
 
@@ -11,12 +11,12 @@ locals {
   }
 }
 
-resource random_pet name {
+resource "random_pet" "name" {
   length    = 3
   separator = "-"
 }
 
-resource aws_s3_bucket bucket {
+resource "aws_s3_bucket" "bucket" {
   bucket = "${var.env}-${random_pet.name.id}"
   acl    = "public-read"
 
@@ -46,7 +46,7 @@ EOF
   force_destroy = true
 }
 
-resource aws_s3_bucket_object website {
+resource "aws_s3_bucket_object" "website" {
   acl          = "public-read"
   key          = "index.html"
   bucket       = aws_s3_bucket.bucket.id

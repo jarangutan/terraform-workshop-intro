@@ -396,6 +396,18 @@ resource "aws_s3_bucket_object" "website" {
 
 ----
 
+### outputs.tf
+
+- Create the `website_endpoint` output to show the link to our website after terraform finishes applying
+
+```
+output "website_endpoint" {
+  value = "http://${aws_s3_bucket.bucket.website_endpoint}/index.html"
+}
+```
+
+----
+
 ### Run terraform apply
 Deploy to AWS! **Note** we referenced `dev.tfvars` file!
 

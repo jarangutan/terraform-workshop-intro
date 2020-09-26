@@ -428,3 +428,15 @@ State files can be hosted remotely as a remote backend so you can work as a team
 ### To enable Terraform Cloud Backend for Buckets
 
 Follow the instructions found in `backend.tf` <3
+
+---
+
+## Congratulations!
+
+You made it past the workshop. That's pretty rad!
+
+I know it's a lot and the concepts are pretty weird but I highly recommend you learn Terraform
+
+A lot of companies are looking for it along with cloud knowledge (AWS, GCP, Azure, so on)
+
+Ezpz Jobs

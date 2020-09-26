@@ -32,6 +32,7 @@ This tutorial covers the basics of terraform by walking you through creating a s
     - We will be working within the free tier of AWS but some small charges may occur
 - [A Terraform Cloud Account (OPTIONAL)](https://app.terraform.io/)
     - Used for managing remote terraform backends
+
 ---
 
 ## Caveats
@@ -43,7 +44,7 @@ This tutorial covers the basics of terraform by walking you through creating a s
 
 ---
 
-## Terraform: The Basics
+## Terraform
 
 Terraform is an **infrastructure as code** tool that lets developers easily build, change and version infrastructure. 
 
@@ -75,10 +76,12 @@ Terraform is an **infrastructure as code** tool that lets developers easily buil
 
 ---
 
-### Install Terraform CLI
+## Install Terraform CLI
 
 - Download the binary from https://www.terraform.io/downloads.html
 - **Windows users** Highly recommend you install git-bash or some other bash like terminal to use with Terraform
+
+---
 
 ### Important Terraform CLI Commands
 
@@ -143,7 +146,7 @@ output=json
 
 ---
 
-## Terraform Language Basics
+## Terraform Basics
 
 ----
 
@@ -184,7 +187,7 @@ provider "aws" {
 
 - Created using a variable block
 - Variables can be loaded from .tfvars files which hold key value pairs
-     - Usage example: Changing variables between different environments
+     - Example: Changing variables by environment
 
 ```
 variable "region" {
@@ -227,6 +230,24 @@ resource "aws_s3_bucket" "example" {
   tags = local.tags
 }
 ```
+
+----
+
+### State
+
+Terraform stores the state (knowledge) of your deployed infrastructure
+- Tracks metadata
+- Used to figure out what to change when applying new changes
+- Used to figure out what to delete when running a destroy
+- State can be stored remotely so multiple devs can work on the same infrastructure
+
+----
+
+### State Part 2: Electric Bogaloo
+
+The default terraform state file is `terraform.tfstate`
+
+Fun reading: https://www.terraform.io/docs/state/index.html
 
 ----
 
@@ -367,14 +388,43 @@ resource "aws_s3_bucket_object" "website" {
 
 ----
 
-### Run terraform
-Deploy out to AWS! **Note** that we referenced the `dev.tfvars` file!
+### Run terraform apply
+Deploy to AWS! **Note** we referenced `dev.tfvars` file!
 
 ```
 terraform apply -var-file=dev.tfvars
 ```
 
-![ ](.images/terraformapply.gif)
+![ ](./images/terraformapply.gif)
 
+----
 
-### 
+### Click your fancy site
+
+The bucket website is deployed and your bucket is out there!
+
+![ ](./images/clickthelink.gif)
+
+----
+
+### Run terraform destroy
+
+After you're done, delete stuff!
+
+![ ](./images/terraformdestroy.gif)
+
+---
+
+## Terraform Cloud Backend
+
+State files can be hosted remotely as a remote backend so you can work as a team using the same state
+
+- This is how most teams work
+- There are a variety ways of hosting your state file (AWS, Terraform Cloud and so on)
+- Terraform Cloud is free :D
+
+----
+
+### To enable Terraform Cloud Backend for Buckets
+
+Follow the instructions found in `backend.tf` <3

@@ -2,8 +2,8 @@
 Intro to terraform workshop covering the creation of a "terraform_backend" and a "lambda_api" using Amazon Web Services (AWS)
 
 ## What is in this repo?
-### "terraform_backend/"
-This tutorial covers how to set up the terraform S3/DynamoDB state backend in AWS for use with the lambda_api/
+### "buckets/"
+This tutorial covers the basics of terraform by walking you through creating a static website out on S3
 
 ### "quotes_api" branch
 This is a Quotes API that is using AWS Lambda, API Gateway and DynamoDB with TypeScript. I'm still working on finishing it but a lot of stuff is there for provisioning the resources.

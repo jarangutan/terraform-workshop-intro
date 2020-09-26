@@ -41,6 +41,7 @@ This tutorial covers the basics of terraform by walking you through creating a s
 - This workshop is tailored to stay closely within the AWS free tier
 - There is a chance you might get charged for the resources used in this workshop
 - I'm not responsible for that so please be responsible with the resource you put out there!
+- Highly recommend you tear down resources after the workshop <3
 
 ---
 
@@ -57,6 +58,13 @@ Terraform is an **infrastructure as code** tool that lets developers easily buil
 - Handles provisioning of dependent and non-dependent resources in parallel
 - Can be easily automated which means no click-ops for devs :D
 - Tearing down and building back up is as easy as `terraform apply` and `terraform destroy`
+
+---
+
+## Terraform is easy, Clouds are hard
+
+> "To use infrastructure as code you need to understand the infrastructure you're codifying"
+> - Jose from State Farm at some point breaking prod again
 
 ---
 
